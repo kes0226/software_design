@@ -118,20 +118,6 @@ public class Register extends JFrame {
         high.addActionListener(abilityListener);
         low.addActionListener(abilityListener);
 
-        int nextchallenge = 0;
-        try {
-            String content = new String(Files.readAllBytes(Paths.get("food/food_collection/"+selectedAbility[0]+selectedFood[0]+".txt")));
-            String[] parts = content.split("/");
-            Random random = new Random();
-            nextchallenge = Integer.parseInt(parts[random.nextInt(parts.length)]);  //랜덤한 음식의 음식번호를 nextchallenge에 저장
-            //새 챌린지를 바탕으로 새로운 화면 생성(id, 다음챌린지번호, 난이도, 종류)
-            System.out.println(nextchallenge);
-        } catch (IOException ex) {
-            System.err.println("파일에 읽기 중 오류가 발생했습니다: " + ex.getMessage());
-        }
-        final int finalNextchallenge = nextchallenge;
-
-
 
         //등록 버튼
         JButton register = new JButton("register");
@@ -142,41 +128,53 @@ public class Register extends JFrame {
         register.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String idContent = id_text.getText();  //입력한 id와 password 받아옴
+                String idContent = id_text.getText(); // 입력한 id와 password 받아옴
                 String passwordContent = p_text.getText();
-                //id와 password가 비워있으면 안됨
-                if (!idContent.isEmpty() && !passwordContent.isEmpty() && checkID(idContent)) {
+                // id와 password가 비워있으면 오류 메시지
+                if (idContent.isEmpty() || passwordContent.isEmpty()) {
+                    JOptionPane.showMessageDialog(cp, "ID 또는 Password가 비어 있습니다.", "오류", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // 선호음식 및 요리실력이 선택되지 않은 경우 오류 메시지
+                if (selectedFood[0].isEmpty() || selectedAbility[0].isEmpty()) {
+                    JOptionPane.showMessageDialog(cp, "선호음식 및 요리실력을 선택해 주세요.", "오류", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                if (checkID(idContent)) {
                     String fileName = idContent.trim(); // 파일이름으로 사용할 때 공백 제거
 
                     // id와 password를 rank파일에 추가
                     try (FileWriter member = new FileWriter("rank.txt", true)) {
-                        member.write(idContent+"/");
+                        member.write(idContent + "/");
                         System.out.println("ID와 Password를 rank에 성공적으로 등록했습니다.");
                     } catch (IOException ex) {
-                        System.err.println("파일에 쓰기 중 오류가 발생했습니다: " + ex.getMessage());
+                        System.err.println("파일 쓰기 중 오류가 발생했습니다: " + ex.getMessage());
                     }
 
                     // 새로운 id파일을 생성 후 id와 password를 추가
+                    int nextchallenge = nextchallenge(selectedFood[0], selectedAbility[0]);
                     try (FileWriter writer = new FileWriter(fileName + ".txt")) {
-                        writer.write(idContent + "/" + passwordContent + "//"+"0"+"/"+finalNextchallenge+"/"+ selectedAbility[0] + selectedFood[0]);  //초기에 정보 저장해놓은 것
+                        writer.write(idContent + "/" + passwordContent + "//" + "0" + "/" + nextchallenge + "/" + selectedAbility[0] + selectedFood[0]); // 초기에 정보 저장해놓은 것
                         System.out.println("ID와 Password를 성공적으로 등록했습니다.");
                     } catch (IOException ex) {
-                        System.err.println("파일에 쓰기 중 오류가 발생했습니다: " + ex.getMessage());
+                        System.err.println("파일 쓰기 중 오류가 발생했습니다: " + ex.getMessage());
                     }
-                    //id_list.txt 파일을 생성
+                    // id_list.txt 파일을 생성
                     try (FileWriter writer = new FileWriter(fileName + "_list.txt")) {
                         System.out.println("ID와 Password를 성공적으로 등록했습니다.");
                     } catch (IOException ex) {
-                        System.err.println("파일에 쓰기 중 오류가 발생했습니다: " + ex.getMessage());
+                        System.err.println("파일 쓰기 중 오류가 발생했습니다: " + ex.getMessage());
                     }
 
-                    //등록 성공 후 로그인 화면으로 이동
-                    dispose(); //등록창 닫음
+                    // 등록 성공 후 로그인 화면으로 이동
+                    dispose(); // 등록창 닫음
                     Login log = new Login();
                     log.Login_show();
 
                 } else {
-                    System.out.println("ID 또는 Password가 비어 있습니다.");
+                    JOptionPane.showMessageDialog(cp, "ID가 유효하지 않습니다.", "오류", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -184,6 +182,8 @@ public class Register extends JFrame {
         setSize(600, 450);
         setVisible(true);
     }
+
+
     //id, password 등록버튼 누르고 id 중복되는지 체크하는 함수
     public boolean checkID(String idContent){  //id 중복되는지 check
         try {
@@ -200,6 +200,20 @@ public class Register extends JFrame {
             System.err.println("파일에 읽기 중 오류가 발생했습니다: " + ex.getMessage());
         }
         return true;
+    }
+
+    public Integer nextchallenge(String selectedFood, String selectedAbility){
+        int nextchallenge = 0;
+        try {
+            String content = new String(Files.readAllBytes(Paths.get("food/food_collection/"+selectedAbility+selectedFood+".txt")));
+            String[] parts = content.split("/");
+            Random random = new Random();
+            nextchallenge = Integer.parseInt(parts[random.nextInt(parts.length)]);
+            //랜덤한 음식의 음식번호를 nextchallenge에 저장
+        } catch (IOException ex) {
+            System.err.println("파일에 읽기 중 오류가 발생했습니다: " + ex.getMessage());
+        }
+        return nextchallenge;
     }
 
 
