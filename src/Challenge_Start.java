@@ -20,7 +20,7 @@ public class Challenge_Start extends JFrame{
     }
 
 
-    void show_Challenge(){
+    void show_startChallenge(){
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //전체화면 frame 만들기
         Container cp = getContentPane();

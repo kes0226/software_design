@@ -12,14 +12,101 @@ public class Menu extends JFrame {
     List list;
     Friend friend;
     Rank rank;
+    Recipe recipe;
+    FoodCaptin foodCaptin;
+
 
     Menu() {
         jp = new JPanel();
-        main = new Main_Board(Login.getID());
+        main = new Main_Board();
         challenge = new Challenge();
-        list = new List(Login.getID());
+        list = new List();
         friend = new Friend();
         rank = new Rank();
+    }
+
+    Menu(String id){
+        jp = new JPanel();
+        recipe = new Recipe();
+        foodCaptin = new FoodCaptin();
+    }
+
+    public void Administrator_Menu(){
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        Container cp = getContentPane();
+        cp.setLayout(null);
+        setSize(614, 650);
+
+        // 뼈대가 되면 jp 설정
+        jp.setSize(614, 610);
+        jp.setLocation(0, 40);
+
+        //젤 처음 화면은 member화면으로
+        jp = rank.show_Panel();
+        cp.add(jp);
+
+        // rank로 가는 버튼
+        JButton rank_b = new JButton("rank");
+        rank_b.setLocation(360, 0);
+        rank_b.setSize(120, 40);
+        cp.add(rank_b);
+        rank_b.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                cp.remove(jp); //cp에 원래 있던 jp 삭제
+
+                jp = rank.show_Panel();
+
+                cp.add(jp);  //다시 cp에 jp를 추가
+
+                revalidate(); // 레이아웃을 새로고침
+                repaint(); // 화면을 다시 그림
+
+            }
+        });
+
+        JButton recipe_B = new JButton("rank");
+        recipe_B.setLocation(360, 0);
+        recipe_B.setSize(120, 40);
+        cp.add(recipe_B);
+        recipe_B.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                cp.remove(jp); //cp에 원래 있던 jp 삭제
+
+                jp = recipe.Recipe_Panel();
+
+                cp.add(jp);  //다시 cp에 jp를 추가
+
+                revalidate(); // 레이아웃을 새로고침
+                repaint(); // 화면을 다시 그림
+
+            }
+        });
+
+        JButton captin_B = new JButton("rank");
+        captin_B.setLocation(360, 0);
+        captin_B.setSize(120, 40);
+        cp.add(captin_B);
+        captin_B.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                cp.remove(jp); //cp에 원래 있던 jp 삭제
+
+                jp = foodCaptin.Captin_Panel();
+
+                cp.add(jp);  //다시 cp에 jp를 추가
+
+                revalidate(); // 레이아웃을 새로고침
+                repaint(); // 화면을 다시 그림
+
+            }
+        });
+
     }
 
     public void Menu_show() {
@@ -42,6 +129,7 @@ public class Menu extends JFrame {
         main_B.setLocation(0, 0);
         main_B.setSize(120, 40);
         cp.add(main_B);
+
         main_B.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -51,8 +139,7 @@ public class Menu extends JFrame {
                 revalidate(); // 레이아웃을 새로고침
                 repaint(); //화면을 다시 그림
             }
-            // main_board 화면을 띄워줌
-            // 그러면 버튼을 누를 때마다 처음에 생성한 id의 main_board를 계속 show해줌
+
         });
 
         //challenge로 가는 버튼
@@ -119,19 +206,6 @@ public class Menu extends JFrame {
 
                 cp.remove(jp); //cp에 원래 있던 jp 삭제
 
-                //jp.removeAll();  //현재 jp의 내용 삭제
-                //새로운 friend패널을 만들어 스크롤 추가
-                //JPanel fri_panel = friend.show_Friends();
-
-                // fri_panel에 JScrollPane 속성 추가
-                //JScrollPane scrollPane = new JScrollPane(fri_panel);
-                //scrollPane.setPreferredSize(new Dimension(614, 610));
-                //scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-                //scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-                //friend패널을 현재jp 위에 겹치기
-                //jp.add(scrollPane);
-
                 jp = friend.Friend_Panel();
 
                 cp.add(jp);  //다시 cp에 jp를 추가
@@ -144,6 +218,7 @@ public class Menu extends JFrame {
 
         setVisible(true);
     }
+
 
 
 }

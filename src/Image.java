@@ -140,6 +140,7 @@ public class Image extends JFrame {
             passwordContent = part[1];
             success = Integer.parseInt(part[3])+1;
             friends = part[2];
+            System.out.println(success);
         } catch (IOException ex) {
             System.err.println("파일에 쓰기 중 오류가 발생했습니다: " + ex.getMessage());
         }
