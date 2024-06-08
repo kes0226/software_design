@@ -37,7 +37,7 @@ public class UserList_ShowManager {
         name.setFont(new Font("NanumGothic", Font.BOLD, 24));
         panel.add(name, BorderLayout.WEST);
 
-        JButton list = new JButton("친구");
+        JButton list = new JButton("list");
         list.setPreferredSize(new Dimension(100, 40));
         panel.add(list, BorderLayout.EAST);
 

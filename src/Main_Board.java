@@ -1,6 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -9,7 +11,7 @@ public class Main_Board extends JFrame {
 
     private String foodCaptin, food, image = " ";
 
-    public JPanel show_Main_Board() {
+    public JPanel show_Main_Board(Frame menu) {
 
         JPanel jp = new JPanel(); // 새로운 JPanel 인스턴스를 생성합니다.
         jp.setLayout(null);
@@ -35,6 +37,19 @@ public class Main_Board extends JFrame {
         imageLabel.setLocation(132, 150);
         imageLabel.setSize(350, 300);
         jp.add(imageLabel);
+
+        JButton off = new JButton("프로그램 종료");
+        off.setLocation(225, 520);
+        off.setSize(150, 40);
+        jp.add(off);
+
+        off.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, "시스템을 종료합니다");
+                menu.dispose();  //프로그램 종료
+            }
+        });
 
         return jp; // 새로운 JPanel 인스턴스를 반환합니다.
     }

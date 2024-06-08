@@ -68,10 +68,18 @@ public class Login extends JFrame {
 
 
                 if (checkInfo(id, password)) {
-                    JOptionPane.showMessageDialog(null, "Login Successful! Member ID: " + id);
+                    if(id.equals("administrator")){
+                        JOptionPane.showMessageDialog(null, "Welcome administrator");
+                        Menu menu = new Menu(id);
+                        menu.Administrator_Menu();
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(null, "Login Successful! Member ID: " + id);
+                        dispose();
+                        Menu menu = new Menu();
+                        menu.Menu_show();
+                    }
                     dispose();
-                    Menu menu = new Menu();
-                    menu.Menu_show();
                 } else {
                     JOptionPane.showMessageDialog(null, "Invalid ID or Password!");
                 }

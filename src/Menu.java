@@ -27,6 +27,7 @@ public class Menu extends JFrame {
 
     Menu(String id){
         jp = new JPanel();
+        rank = new Rank();
         recipe = new Recipe();
         foodCaptin = new FoodCaptin();
     }
@@ -48,8 +49,8 @@ public class Menu extends JFrame {
 
         // rank로 가는 버튼
         JButton rank_b = new JButton("rank");
-        rank_b.setLocation(360, 0);
-        rank_b.setSize(120, 40);
+        rank_b.setLocation(0, 0);
+        rank_b.setSize(200, 40);
         cp.add(rank_b);
         rank_b.addActionListener(new ActionListener() {
             @Override
@@ -67,9 +68,9 @@ public class Menu extends JFrame {
             }
         });
 
-        JButton recipe_B = new JButton("rank");
-        recipe_B.setLocation(360, 0);
-        recipe_B.setSize(120, 40);
+        JButton recipe_B = new JButton("recipe");
+        recipe_B.setLocation(200, 0);
+        recipe_B.setSize(200, 40);
         cp.add(recipe_B);
         recipe_B.addActionListener(new ActionListener() {
             @Override
@@ -87,9 +88,9 @@ public class Menu extends JFrame {
             }
         });
 
-        JButton captin_B = new JButton("rank");
-        captin_B.setLocation(360, 0);
-        captin_B.setSize(120, 40);
+        JButton captin_B = new JButton("captin");
+        captin_B.setLocation(400, 0);
+        captin_B.setSize(200, 40);
         cp.add(captin_B);
         captin_B.addActionListener(new ActionListener() {
             @Override
@@ -107,6 +108,8 @@ public class Menu extends JFrame {
             }
         });
 
+        setVisible(true);
+
     }
 
     public void Menu_show() {
@@ -121,7 +124,7 @@ public class Menu extends JFrame {
         jp.setLocation(0, 40);
 
         //젤 처음 화면은 main화면으로
-        jp = main.show_Main_Board();
+        jp = main.show_Main_Board(Menu.this);
         cp.add(jp);
 
         // main으로 가는 버튼
@@ -134,7 +137,7 @@ public class Menu extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cp.remove(jp); // 원래 있던 JPanel을 삭제 후
-                jp = main.show_Main_Board(); // 새로운 JPanel을 가져와서 jp에 할당
+                jp = main.show_Main_Board(Menu.this); // 새로운 JPanel을 가져와서 jp에 할당
                 cp.add(jp); // 새로운 JPanel 추가
                 revalidate(); // 레이아웃을 새로고침
                 repaint(); //화면을 다시 그림

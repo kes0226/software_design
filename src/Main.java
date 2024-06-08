@@ -6,8 +6,6 @@ public class Main {
         // to see how IntelliJ IDEA suggests fixing it.
         Login login = new Login();
         login.Login_show();
-
-
-
+        
     }
 }
