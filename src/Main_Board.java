@@ -21,25 +21,25 @@ public class Main_Board extends JFrame {
         getFoodCaptin();
 
         JLabel main = new JLabel("요리대장: "+foodCaptin);
-        main.setLocation(132, 50);
+        main.setLocation(132, 10);
         main.setSize(500, 50);
         main.setFont(new Font("NanumGothic", Font.BOLD, 24));
         jp.add(main);
 
         JLabel name = new JLabel("음식: "+food);
-        name.setLocation(132, 100);
+        name.setLocation(132, 60);
         name.setSize(500, 50);
         name.setFont(new Font("NanumGothic", Font.BOLD, 24));
         jp.add(name);
 
         ImageIcon imageIcon = new ImageIcon("food/my_food/" + image);
         JLabel imageLabel = new JLabel(imageIcon);
-        imageLabel.setLocation(132, 150);
-        imageLabel.setSize(350, 300);
+        imageLabel.setLocation(132, 110);
+        imageLabel.setSize(400, 390);
         jp.add(imageLabel);
 
         JButton off = new JButton("프로그램 종료");
-        off.setLocation(225, 520);
+        off.setLocation(225, 510);
         off.setSize(150, 40);
         jp.add(off);
 
