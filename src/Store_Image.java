@@ -12,7 +12,7 @@ public class Store_Image extends JFrame {
 
     private ModalDialog modalDialog;
 
-    String name, food_p;
+    String name, food_p, date;
     File store_file;
     java.awt.Image resizedImage;
 
@@ -79,7 +79,8 @@ public class Store_Image extends JFrame {
                 String date = date_txt.getText();
                 if(checkDateFormat(date) && store_file!=null){
                     try {
-                        save(date); //id_list에 저장
+                        save_image(date, resizedImage); //id_list에 저장
+                        save_file(date);
 
                     } catch (IOException ex) {
                         ex.printStackTrace();
@@ -112,14 +113,19 @@ public class Store_Image extends JFrame {
         return m.matches();
     }
 
-    private void save(String date) throws IOException {
+    public void save_image(String date, java.awt.Image resizedImage) throws IOException {
 
         BufferedImage bufferedImage = new BufferedImage(400,390, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = bufferedImage.createGraphics();
         g2d.drawImage(resizedImage, 0, 0, null);
         g2d.dispose();
-
-        String outputImagePath = "food/my_food/"+name+"_"+date+".jpg";
+        String outputImagePath;
+        if(date.equals("administrator")){
+            outputImagePath = "food/food_pic/"+name+".jpg";
+        }
+        else{
+            outputImagePath = "food/my_food/"+name+"_"+date+".jpg";
+        }
         File outputFile = new File(outputImagePath);
         // BufferedImage를 파일로 저장
         try {
@@ -129,7 +135,9 @@ public class Store_Image extends JFrame {
             e.printStackTrace();
         }
 
+    }
 
+    public void save_file(String date){
         //id_list.txt에 모든 정보 적기
         String id = Login.getID();
         try (FileWriter writer = new FileWriter(id+"_list.txt", true)) {

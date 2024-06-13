@@ -106,7 +106,6 @@ public class Challenge extends JFrame {
             String content = new String(Files.readAllBytes(Paths.get("food/recipe.txt")));
             String[] recipe_s = content.split("/");
             recipe = recipe_s[challenge];
-
         } catch (IOException ex) {
             System.err.println("파일에 읽기 중 오류가 발생했습니다: " + ex.getMessage());
         }

@@ -61,6 +61,7 @@ public class Main_Board extends JFrame {
             foodCaptin = parts[2];
             food = parts[3];
             image = parts[4];
+
         } catch (IOException ex) {
             System.err.println("파일에 읽기 중 오류가 발생했습니다: " + ex.getMessage());
         }
