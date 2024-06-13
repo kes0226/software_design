@@ -190,7 +190,7 @@ public class Register extends JFrame {
             String content = new String(Files.readAllBytes(Paths.get("rank.txt")));
             String[] parts = content.split("/");
             for(int i=0; i< parts.length; i++){
-                if(parts[i].equals(idContent)){
+                if(parts[i].equals(idContent) || parts[i].equals("administrator")){
                     System.out.println(parts[i]);
                     JOptionPane.showMessageDialog(null, "중복되는 ID입니다!");
                     return false;

@@ -10,47 +10,16 @@ public class Challenge extends JFrame {
 
     private ModalDialog modalDialog;
 
+    int challenge = 0;
+    String food_p = "", name = "", path = "", ingredient = "", recipe = "";
+
     public JPanel show_Challenge(Frame menu) {
         JPanel jp = new JPanel(); // 새로운 JPanel 인스턴스를 생성합니다.
         jp.setLayout(null);
         jp.setSize(614, 610);
         jp.setLocation(0, 40);
 
-        int challenge = 0;
-        String food_p = "";
-        String name = "", path = "", ingredient = "", recipe = "";
-
-        //id.txt에서 challenge 음식 인덱스 알아내기
-        try {
-            String content = new String(Files.readAllBytes(Paths.get(Login.getID() + ".txt")));
-            String[] parts = content.split("/");
-            challenge = Integer.parseInt(parts[4]);
-            food_p = parts[5];
-        } catch (IOException ex) {
-            System.err.println("파일에 읽기 중 오류가 발생했습니다: " + ex.getMessage());
-        }
-
-        //food_info.txt에서 음식이름, 사진경로 알아내기
-        try {
-            String content = new String(Files.readAllBytes(Paths.get("food/food_info.txt")));
-            String[] food_s = content.split("~");
-            String[] food = food_s[challenge].split("/");
-            name = food[1];
-            ingredient = food[2];
-            path = food[3];  //음식사진 이름이 담겨 있는걸로 수정
-        } catch (IOException ex) {
-            System.err.println("파일에 읽기 중 오류가 발생했습니다: " + ex.getMessage());
-        }
-
-        //recipe.txt에서 레시피 가져오기
-        try {
-            String content = new String(Files.readAllBytes(Paths.get("food/recipe.txt")));
-            String[] recipe_s = content.split("/");
-            recipe = recipe_s[challenge];
-
-        } catch (IOException ex) {
-            System.err.println("파일에 읽기 중 오류가 발생했습니다: " + ex.getMessage());
-        }
+        get_ChalInfo();
 
         //챌린지 제목, 음식 종류, 난이도
         JLabel food = new JLabel(name+"("+food_p+")", JLabel.CENTER);
@@ -83,7 +52,7 @@ public class Challenge extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 menu.dispose();  //menu지우기
                 Challenge_Start start = new Challenge_Start(finalName, finalPath, finalIngre, finalRecipe, finalFood_p);
-                start.show_Challenge();
+                start.show_startChallenge();
             }
         });
 
@@ -107,6 +76,39 @@ public class Challenge extends JFrame {
         });
 
         return jp; // 새로운 JPanel 인스턴스를 반환합니다.
+    }
+
+    public void get_ChalInfo(){
+        //id.txt에서 challenge 음식 인덱스 알아내기
+        try {
+            String content = new String(Files.readAllBytes(Paths.get(Login.getID() + ".txt")));
+            String[] parts = content.split("/");
+            challenge = Integer.parseInt(parts[4]);
+            food_p = parts[5];
+        } catch (IOException ex) {
+            System.err.println("파일에 읽기 중 오류가 발생했습니다: " + ex.getMessage());
+        }
+
+        //food_info.txt에서 음식이름, 사진경로 알아내기
+        try {
+            String content = new String(Files.readAllBytes(Paths.get("food/food_info.txt")));
+            String[] food_s = content.split("~");
+            String[] food = food_s[challenge].split("/");
+            name = food[1];
+            ingredient = food[2];
+            path = food[3];  //음식사진 이름이 담겨 있는걸로 수정
+        } catch (IOException ex) {
+            System.err.println("파일에 읽기 중 오류가 발생했습니다: " + ex.getMessage());
+        }
+
+        //recipe.txt에서 레시피 가져오기
+        try {
+            String content = new String(Files.readAllBytes(Paths.get("food/recipe.txt")));
+            String[] recipe_s = content.split("/");
+            recipe = recipe_s[challenge];
+        } catch (IOException ex) {
+            System.err.println("파일에 읽기 중 오류가 발생했습니다: " + ex.getMessage());
+        }
     }
 
 }

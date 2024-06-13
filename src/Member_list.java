@@ -10,12 +10,12 @@ import java.nio.file.Paths;
 
 public class Member_list extends JFrame{
 
-    String id;
+    String list_id;
     private String[][] dataArray;
     JPanel panel;
 
     Member_list(String list_id){
-        id = list_id;
+        this.list_id = list_id;
     }
 
     public void show_Member_list(){
@@ -31,7 +31,7 @@ public class Member_list extends JFrame{
         int length = 0;
         String[] foods = {""};
         try {
-            String content = new String(Files.readAllBytes(Paths.get(id + "_list.txt")));
+            String content = new String(Files.readAllBytes(Paths.get(list_id + "_list.txt")));
             foods = content.split("\n");
             length = foods.length;
         } catch (IOException ex) {

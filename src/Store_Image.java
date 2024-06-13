@@ -1,18 +1,22 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.regex.*;  //날짜 형식을 위한 정규표현식 사용
+import java.util.regex.*;//날짜 형식을 위한 정규표현식 사용
 
-public class Image extends JFrame {
+public class Store_Image extends JFrame {
 
     private ModalDialog modalDialog;
 
-    private String name, food_p;
+    String name, food_p, date;
+    File store_file;
+    java.awt.Image resizedImage;
 
-    Image(String name, String food_p){
+    Store_Image(String name, String food_p){
         this.name = name;
         this.food_p = food_p;
     }
@@ -49,19 +53,23 @@ public class Image extends JFrame {
         panel.add(store);
 
         //저장할 파일명, 상수로 저장해야하는데 안되서 배열로 저장함
-        final File[] store_file = new File[1];
         uploadButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JFileChooser fileChooser = new JFileChooser();
-                int result = fileChooser.showOpenDialog(Image.this);
+                int result = fileChooser.showOpenDialog(Store_Image.this);
                 if (result == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = fileChooser.getSelectedFile();
-                    store_file[0] = selectedFile;
+                    store_file = selectedFile;
 
-                    ImageIcon icon = new ImageIcon(selectedFile.getPath());
-                    imageLabel.setIcon(icon);
-                    //여기서 저장할 사진의 크기를 조정하자!
+                    // 이미지를 새로운 크기로 스케일링
+                    ImageIcon originalIcon = new ImageIcon(selectedFile.getPath());
+                    java.awt.Image originalImage = originalIcon.getImage();
+                    resizedImage = originalImage.getScaledInstance(400, 390, Image.SCALE_SMOOTH);
+
+                    // 스케일링된 이미지를 ImageIcon으로 변환
+                    ImageIcon resizedIcon = new ImageIcon(resizedImage);
+                    imageLabel.setIcon(resizedIcon); //고른 이미지를 화면에 보여주기
                 }
             }
         });
@@ -69,19 +77,21 @@ public class Image extends JFrame {
         store.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String date = date_txt.getText();
-                if(checkDateFormat(date) && store_file[0]!=null){
+                if(checkDateFormat(date) && store_file!=null){
                     try {
-                        save(store_file[0], date); //id_list에 저장
+                        save_image(date, resizedImage); //id_list에 저장
+                        save_file(date);
+
                     } catch (IOException ex) {
                         ex.printStackTrace();
-                        JOptionPane.showMessageDialog(Image.this, "이미지 저장에 실패했습니다.");
+                        JOptionPane.showMessageDialog(Store_Image.this, "이미지 저장에 실패했습니다.");
                     }
                     if (modalDialog != null) {
                         modalDialog.dispose();
                     }
                     else{
                         // 새로운 모달 다이얼로그 생성
-                        modalDialog =new ModalDialog(Image.this, false);
+                        modalDialog =new ModalDialog(Store_Image.this, false);
                         modalDialog.setVisible(true);
                     }
                     dispose();
@@ -103,27 +113,36 @@ public class Image extends JFrame {
         return m.matches();
     }
 
-    private void save(File selectedFile, String date) throws IOException {
-        //my_food에 사진 넣기
-        File destinationFile = new File("food/my_food/"+selectedFile.getName());
-        //입력할 파일과 출력할 파일을 입출력스트림에 넣음
-        FileInputStream fis = new FileInputStream(selectedFile);
-        FileOutputStream fos = new FileOutputStream(destinationFile);
-        //파일을 저장할 위치에 씀
-        byte[] buffer = new byte[1024];
-        int length;
-        while ((length = fis.read(buffer)) > 0) {
-            fos.write(buffer, 0, length);
-        }
-        //입출력 스트림 닫음
-        fis.close();
-        fos.close();
+    public void save_image(String date, java.awt.Image resizedImage) throws IOException {
 
+        BufferedImage bufferedImage = new BufferedImage(400,390, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2d = bufferedImage.createGraphics();
+        g2d.drawImage(resizedImage, 0, 0, null);
+        g2d.dispose();
+        String outputImagePath;
+        if(date.equals("administrator")){
+            outputImagePath = "food/food_pic/"+name+".jpg";
+        }
+        else{
+            outputImagePath = "food/my_food/"+Login.getID()+name+"_"+date+".jpg";
+        }
+        File outputFile = new File(outputImagePath);
+        // BufferedImage를 파일로 저장
+        try {
+            ImageIO.write(bufferedImage, "jpg", outputFile);
+            System.out.println("Image saved successfully: " + outputImagePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void save_file(String date){
         //id_list.txt에 모든 정보 적기
         String id = Login.getID();
         try (FileWriter writer = new FileWriter(id+"_list.txt", true)) {
             //사진 파일 저장이 성공하면 id_list.txt파일 이번 챌린지 성공한 음식 모든 내용을 적음
-            writer.write(name+"/"+food_p+"/"+date +"/"+selectedFile.getName() + "\n");
+            writer.write(name+"/"+food_p+"/"+date +"/"+name+"_"+date+".jpg" + "\n");
             System.out.println("이미지를 성공적으로 저장했습니다.");
         } catch (IOException ex) {
             System.err.println("파일에 쓰기 중 오류가 발생했습니다: " + ex.getMessage());
@@ -140,6 +159,7 @@ public class Image extends JFrame {
             passwordContent = part[1];
             success = Integer.parseInt(part[3])+1;
             friends = part[2];
+            System.out.println(success);
         } catch (IOException ex) {
             System.err.println("파일에 쓰기 중 오류가 발생했습니다: " + ex.getMessage());
         }

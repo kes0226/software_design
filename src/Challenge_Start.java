@@ -2,9 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-import java.io.FileWriter;
-import java.io.IOException;
-
 public class Challenge_Start extends JFrame{
     //메뉴가 없는 챌린지 UI들 구현
 
@@ -20,7 +17,7 @@ public class Challenge_Start extends JFrame{
     }
 
 
-    void show_Challenge(){
+    void show_startChallenge(){
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //전체화면 frame 만들기
         Container cp = getContentPane();
@@ -98,7 +95,7 @@ public class Challenge_Start extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 dispose();
 
-                Image image = new Image(name, food_p);
+                Store_Image image = new Store_Image(name, food_p);
                 image.show_Image();  //이미지 업로드 하는 클래스 이동
             }
         });
