@@ -142,7 +142,7 @@ public class Store_Image extends JFrame {
         String id = Login.getID();
         try (FileWriter writer = new FileWriter(id+"_list.txt", true)) {
             //사진 파일 저장이 성공하면 id_list.txt파일 이번 챌린지 성공한 음식 모든 내용을 적음
-            writer.write(name+"/"+food_p+"/"+date +"/"+name+"_"+date+".jpg" + "\n");
+            writer.write(name+"/"+food_p+"/"+date +"/"+Login.getID()+name+"_"+date+".jpg" + "\n");
             System.out.println("이미지를 성공적으로 저장했습니다.");
         } catch (IOException ex) {
             System.err.println("파일에 쓰기 중 오류가 발생했습니다: " + ex.getMessage());
