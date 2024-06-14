@@ -12,7 +12,7 @@ public class Store_Image extends JFrame {
 
     private ModalDialog modalDialog;
 
-    String name, food_p, date;
+    String name, food_p;
     File store_file;
     java.awt.Image resizedImage;
 
